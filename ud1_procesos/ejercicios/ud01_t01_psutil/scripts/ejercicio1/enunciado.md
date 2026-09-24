@@ -25,4 +25,4 @@
     - Paquetes enviados
     - Paquetes recibidos
 5. Guardar información del sistema:
-Realizará un volcado de la información del sistema que se muestra por pantalla a un fichero JSON en la ruta que se proporcione, siendo el nombre del fichero el siguiente: yyyyMMddhhmmss-system-info.json
+    - Realizará un volcado de la información del sistema que se muestra por pantalla a un fichero JSON en la ruta que se proporcione, siendo el nombre del fichero el siguiente:          yyyyMMddhhmmss-system-info.json
