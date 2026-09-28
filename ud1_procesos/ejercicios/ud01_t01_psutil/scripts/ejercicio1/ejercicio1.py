@@ -22,9 +22,37 @@ def info_cpu():
     # 1.2.3 % de memoria usado por cada CPU
     uso_por_cpu = psutil.cpu_percent(percpu=True, interval=1)
 
-
-
 # 1.3 Información de memoria
+
+    memoria = psutil.virtual_memory()
+
+    def bytes_a_gb(bytes_val):
+        return round(bytes_val / (1024 ** 3), 2)
+    
+    # 1.3.1 Memoria total
+    memoria_total_gb = bytes_a_gb(memoria.total)
+
+    # Memoria disponible 
+    memoria_disponible_gb = bytes_a_gb(memoria.available)
+
+    # Porcentaje de memoria usada
+    Porcentaje_usado = memoria.percent
+
+# 1.4 Informacion de discos
+
+    # 1.4.1 Listado de particiones
+    particiones = psutil.disk_partitions()
+
+    for p in particiones:
+        print(f"\nDispositivo:        {p.device}")
+        print(f"Punto de montaje:   {p.mountpoint}")
+        print(f"Sistema de archivos:{p.fstype}")
+
+    # 1.4.2 Uso de disco para cada unidad o partición
+    
+
+
+
 
 
 
