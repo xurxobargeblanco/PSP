@@ -89,6 +89,43 @@ def obtener_informacion_sistema():
 
 # 2. MOSTRAR INFORMACIÓN POR PANTALLA
 
+def mostrar_informacion(datos):
+    """Muestra los datos organizados en la consola."""
+    print("\n" + "=" * 50)
+    print("        INFORMACIÓN DEL SISTEMA")
+    print("=" * 50)
+    
+    print(f"\n1. Plataforma: {datos['plataforma']}")
+
+    print("\n2. Información de CPUs:")
+    print(f"   - CPUs Físicas: {datos['cpu']['cpus_fisicas']}")
+    print(f"   - CPUs Lógicas: {datos['cpu']['cpus_logicas']}")
+    print(f"   - Frecuencia por CPU (MHz): {datos['cpu']['frecuencias_mhz']}")
+    print(f"   - Uso por CPU (%): {datos['cpu']['porcentaje_uso']}")
+
+    print("\n3. Información de Memoria:")
+    print(f"   - Memoria Total: {datos['memoria']['memoria_total_gb']} GB")
+    print(f"   - Memoria Disponible: {datos['memoria']['memoria_disponible_gb']} GB")
+    print(f"   - Porcentaje Usado: {datos['memoria']['porcentaje_usado']}%")
+
+    print("\n4. Información de Discos:")
+    print("   Particiones:")
+    for p in datos['discos']['particiones']:
+        print(f"     * {p['dispositivo']} en '{p['punto_montaje']}' [{p['sistema_archivos']}]")
+        print(f"       Total: {p['total_gb']} GB | Libre: {p['libre_gb']} GB | Uso: {p['porcentaje_uso']}%")
+            
+    print(f"   - Operaciones de lectura: {datos['discos']['operaciones_lectura']}")
+    print(f"   - Operaciones de escritura: {datos['discos']['operaciones_escritura']}")
+    print(f"   - Bytes leídos: {datos['discos']['bytes_leidos']}")
+    print(f"   - Bytes escritos: {datos['discos']['bytes_escritos']}")
+
+    print("\n5. Estadísticas de Red:")
+    print(f"   - Bytes enviados: {datos['red']['bytes_enviados']}")
+    print(f"   - Bytes recibidos: {datos['red']['bytes_recibidos']}")
+    print(f"   - Paquetes enviados: {datos['red']['paquetes_enviados']}")
+    print(f"   - Paquetes recibidos: {datos['red']['paquetes_recibidos']}")
+    print("=" * 50)
+
 # 3. GUARDAR INFORMACIÓN EN JSON
 
 def guardar_informacion(datos):
