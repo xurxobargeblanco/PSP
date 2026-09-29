@@ -40,25 +40,60 @@ def info_cpu():
 
 # 1.4 Informacion de discos
 
+def obtener_info_discos():
+
+    particiones = psutil.disk_partitions()
+    lista_particiones = []
+    
     # 1.4.1 Listado de particiones
+
     particiones = psutil.disk_partitions()
 
     for p in particiones:
-        print(f"\nDispositivo:        {p.device}")
-        print(f"Punto de montaje:   {p.mountpoint}")
-        print(f"Sistema de archivos:{p.fstype}")
+        
+        info_particion = {
+            "dispositivo": p.device,
+            "punto_montaje": p.mountpoint,
+            "sistema_archivos": p.fstype
+        }
 
     # 1.4.2 Uso de disco para cada unidad o partición
+
+    # 1.4.3 Número de operaciones de lectura
+
+    operaciones_lectura = psutil.disk_io_counters.read_count
+
+    # 1.4.4 Número de operaciones de escritura
+
+    operaciones_escritura = psutil.disk_io_counters.write_count
+
+    # 1.4.5 Número de bytes leídos
+
+    bytes_leidos = psutil.disk_io_counters.read_bytes
+
+    # 1.4.6 Número de bytes escritos
+
+    bytes_escritos = psutil.disk_io_counters.write_count
+
+
+# 1.5 Estadísticas de red
+
+    net_io = psutil.net_io_counters(pernic=False, nowrap=True)
+
+    # 1.5.1 Bytes enviados
+    # 1.5.2 Bytes recibidos
+    # 1.5.3 Paquetes enviados
+    # 1.5.4 Paquetes recibidos
+
+    if net_io:
+        bytes_enviados = net_io.bytes_sent  
+        bytes_recibidos = net_io.bytes_recv  
+        paquetes_enviados = net_io.packets_sent 
+        paquetes_recibidos = net_io.packets_recv
+
     
 
-
-
-
-
-
-
-
-
+# 2 Guardar información del sistema:
 
 def menu():
     """Menú principal del programa."""
