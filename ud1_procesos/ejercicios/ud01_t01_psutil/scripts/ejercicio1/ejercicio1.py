@@ -1,5 +1,9 @@
-import psutil
+import os
+import sys
 import platform
+import json
+import psutil
+from datetime import datetime
 
 # FUNCIONES AUXILIARES
 
@@ -86,6 +90,18 @@ def obtener_informacion_sistema():
 # 2. MOSTRAR INFORMACIÓN POR PANTALLA
 
 # 3. GUARDAR INFORMACIÓN EN JSON
+
+def guardar_informacion(datos):
+    """Guarda el diccionario en un archivo JSON en la ruta indicada por el usuario."""
+    ruta = input("\nIntroduce la ruta del directorio donde guardar el archivo JSON: ").strip()
+
+    nombre_fichero = datetime.now().strftime("%Y%m%d%H%M%S") + "-system-info.json"
+    ruta_completa = os.path.join(ruta, nombre_fichero)
+
+    with open(ruta_completa, "w", encoding="utf-8") as f:
+        json.dump(datos, f, indent=4, ensure_ascii=False)
+        
+    print(f"\n[OK] Información guardada con éxito en:\n{ruta_completa}")
 
 # 4. MENÚ PRINCIPAL
 
