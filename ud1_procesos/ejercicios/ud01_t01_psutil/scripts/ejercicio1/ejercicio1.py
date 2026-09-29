@@ -1,108 +1,102 @@
 import psutil
 import platform
 
-# 1 Mostrar información del sistema: Deberán mostrarse por pantalla los siguientes datos:
+# FUNCIONES AUXILIARES
 
-# 1.1 Plataforma sobre la que se ejecuta el script: Windows o Linux
+def bytes_a_gb(bytes_val): return round(bytes_val / (1024 ** 3), 2)
 
-info_plataforma = platform.system
+# 1. RECOPILACIÓN DE DATOS DEL SISTEMA
 
-# 1.2 Información de CPUs
+def obtener_informacion_sistema():
+    
+    # 1.1 Plataforma
 
-def info_cpu():
+    info_plataforma = platform.system()  
 
-    # 1.2.1 Numero de CPUs
-    cpus_físicas = psutil.cpu_count(logical=False)
-    cpus_logicas = psutil.cpu_count(logical=False)
+    # 1.2 Información de CPUs
 
-    # 1.2.2 Frecuencia de cada CPU - MHz
     frecuencias = psutil.cpu_freq(percpu=True)
-    freq_lis = [f.current for f in frecuencias] if frecuencias else []
+    freq_list = [f.current for f in frecuencias] if frecuencias else []
+    
+    info_cpu = {
+        "cpus_fisicas": psutil.cpu_count(logical=False),
+        "cpus_logicas": psutil.cpu_count(logical=True),
+        "frecuencias_mhz": freq_list,
+        "porcentaje_uso": psutil.cpu_percent(percpu=True, interval=1)
+    }
 
-    # 1.2.3 % de memoria usado por cada CPU
-    uso_por_cpu = psutil.cpu_percent(percpu=True, interval=1)
-
-# 1.3 Información de memoria
+    # 1.3 Información de Memoria
 
     memoria = psutil.virtual_memory()
 
-    def bytes_a_gb(bytes_val):
-        return round(bytes_val / (1024 ** 3), 2)
-    
-    # 1.3.1 Memoria total
-    memoria_total_gb = bytes_a_gb(memoria.total)
+    info_memoria = {
+        "memoria_total_gb": bytes_a_gb(memoria.total),
+        "memoria_disponible_gb": bytes_a_gb(memoria.available),
+        "porcentaje_usado": memoria.percent
+    }
 
-    # Memoria disponible 
-    memoria_disponible_gb = bytes_a_gb(memoria.available)
-
-    # Porcentaje de memoria usada
-    Porcentaje_usado = memoria.percent
-
-# 1.4 Informacion de discos
-
-def obtener_info_discos():
+    # 1.4 Información de Discos
 
     particiones = psutil.disk_partitions()
     lista_particiones = []
-    
-    # 1.4.1 Listado de particiones
-
-    particiones = psutil.disk_partitions()
 
     for p in particiones:
         
-        info_particion = {
+        uso = psutil.disk_usage(p.mountpoint)
+        
+        datos_part = {
             "dispositivo": p.device,
             "punto_montaje": p.mountpoint,
-            "sistema_archivos": p.fstype
+            "sistema_archivos": p.fstype,
+            "total_gb": bytes_a_gb(uso.total),
+            "libre_gb": bytes_a_gb(uso.free),
+            "porcentaje_uso": uso.percent
         }
+        lista_particiones.append(datos_part)
 
-    # 1.4.2 Uso de disco para cada unidad o partición
+    disk_io = psutil.disk_io_counters()
+    info_discos = {
+        "particiones": lista_particiones,
+        "operaciones_lectura": disk_io.read_count if disk_io else 0,
+        "operaciones_escritura": disk_io.write_count if disk_io else 0,
+        "bytes_leidos": disk_io.read_bytes if disk_io else 0,
+        "bytes_escritos": disk_io.write_bytes if disk_io else 0
+    }
 
-    # 1.4.3 Número de operaciones de lectura
+    # 1.5 Estadísticas de Red
 
-    operaciones_lectura = psutil.disk_io_counters.read_count
+    net_io = psutil.net_io_counters()
+    info_red = {
+        "bytes_enviados": net_io.bytes_sent if net_io else 0,
+        "bytes_recibidos": net_io.bytes_recv if net_io else 0,
+        "paquetes_enviados": net_io.packets_sent if net_io else 0,
+        "paquetes_recibidos": net_io.packets_recv if net_io else 0
+    }
 
-    # 1.4.4 Número de operaciones de escritura
+    # Diccionario global
 
-    operaciones_escritura = psutil.disk_io_counters.write_count
+    return {
+        "plataforma": info_plataforma,
+        "cpu": info_cpu,
+        "memoria": info_memoria,
+        "discos": info_discos,
+        "red": info_red
+    }
 
-    # 1.4.5 Número de bytes leídos
+# 2. MOSTRAR INFORMACIÓN POR PANTALLA
 
-    bytes_leidos = psutil.disk_io_counters.read_bytes
+# 3. GUARDAR INFORMACIÓN EN JSON
 
-    # 1.4.6 Número de bytes escritos
-
-    bytes_escritos = psutil.disk_io_counters.write_count
-
-
-# 1.5 Estadísticas de red
-
-    net_io = psutil.net_io_counters(pernic=False, nowrap=True)
-
-    # 1.5.1 Bytes enviados
-    # 1.5.2 Bytes recibidos
-    # 1.5.3 Paquetes enviados
-    # 1.5.4 Paquetes recibidos
-
-    if net_io:
-        bytes_enviados = net_io.bytes_sent  
-        bytes_recibidos = net_io.bytes_recv  
-        paquetes_enviados = net_io.packets_sent 
-        paquetes_recibidos = net_io.packets_recv
-
-    
-
-# 2 Guardar información del sistema:
+# 4. MENÚ PRINCIPAL
 
 def menu():
     """Menú principal del programa."""
     while True:
-        print("\n    MENÚ DE INFORMACIÓN DEL SISTEMA    ")
+        print("\n--- MENÚ DE INFORMACIÓN DEL SISTEMA ---")
         print("1. Mostrar información del sistema")
         print("2. Guardar información del sistema")
         print("3. Salir")
-    
+        
         opcion = input("Selecciona una opción (1-3): ").strip()
         
         if opcion == "1":
@@ -115,21 +109,9 @@ def menu():
             guardar_informacion(datos)
         elif opcion == "3":
             print("Saliendo del programa...")
-            #sys.exit()
+            sys.exit()
         else:
             print("Opción inválida. Inténtalo de nuevo.")
-
-def obtener_informacion_sistema():
-
-    print()
-
-def guardar_informacion():
-
-    print()
-
-def mostrar_informacion():
-
-    print()
 
 
 if __name__ == "__main__":
