@@ -4,10 +4,28 @@ import psutil
 # 1. Mostrar todos los servicios:
 #     - Para cada servicio se mostrará su nombre, PID asociado, estado y tipo de inicio
 
-def obtener_servicios():
-    lista_servicios = []
 
-    
+def mostrar_todos():
+    for s in psutil.win_service_iter():
+        info = s.info()
+        print(f"{info['name']} | {str(info['pid'])} | {info['status']} | {info['start_type']}")
+
+def mostrar_filtrados():
+    filtro_input = input("Filtro (iniciado / parado) :").strip().lower().split()
+    if not filtro_input:
+        return
+    estado_filtro = filtro_input[0]
+    inicio_filtro = filtro_input[1] if len(filtro_input) > 1 else None
+
+    for s in psutil.win_service_iter():
+        info = s.info()
+        cumple_estado = info['status'].lower() == estado_filtro
+        cumple_inicio = (info['start_type'].lower() == inicio_filtro) if inicio_filtro else True
+
+        if cumple_estado and cumple_inicio:
+            print(f"{info['name']} | {str(info['pid'])} | {info['status']} | {info['start_type']}")
+
+
 
 
 
