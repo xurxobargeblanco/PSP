@@ -12,8 +12,14 @@ except FileNotFoundError:
 
 acabar = False
 
-while acabar != True :
-    respuesta = input("")
-    if respuesta == 'exit': acabar = True
+while not acabar:
+    linea = input("> ")
     
-          
+    if linea.strip():
+        partes = linea.split()
+        
+        if partes[0] == 'exit':
+            acabar = True
+        else:
+            pass           
+
