@@ -16,15 +16,16 @@ def agregar_elemento(diccionario_compartido,id_proceso):
 if __name__ == '__main__':
     
     with multiprocessing.Manager() as manager:
+
         diccionario = manager.dict()
 
         procesos = []
-        cantidad_procesos = 2
+        cantidad_procesos = 4
 
         for i in range(cantidad_procesos):
             p = multiprocessing.Process(target=agregar_elemento,args=(diccionario,i))
             procesos.append(p)
             p.start()
             p.join()
-            
-        print(f"Lista : {dict(diccionario)}")
+
+        print(f"Lista : {diccionario}")
