@@ -1,10 +1,9 @@
 import multiprocessing
 import time
 import random
+import os
 
 def agregar_elemento(diccionario_compartido,id_proceso):
-    time.sleep(random.random())
-
     time.sleep(random.random())
     
     clave = f"proceso_{id_proceso}"
