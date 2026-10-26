@@ -19,8 +19,12 @@ if __name__ == '__main__':
         diccionario = manager.dict()
 
         procesos = []
-        cantidad_procesos = 5
+        cantidad_procesos = 2
 
         for i in range(cantidad_procesos):
             p = multiprocessing.Process(target=agregar_elemento,args=(diccionario,i))
+            procesos.append(p)
+            p.start()
+            p.join()
             
+        print(f"Lista : {dict(diccionario)}")
