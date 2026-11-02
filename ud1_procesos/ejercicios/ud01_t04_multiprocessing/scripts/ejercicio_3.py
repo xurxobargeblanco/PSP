@@ -1,5 +1,6 @@
 import multiprocessing
 import random
+import time
 
 def num_aleatorios(cola):
     for i in range(5):

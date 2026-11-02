@@ -15,6 +15,5 @@ if __name__ == "__main__":
     print("Números orixinais:", numeros)
     print("Cadrados:", resultados)
 
-    pool.close()
-    pool.join()
+    
 
