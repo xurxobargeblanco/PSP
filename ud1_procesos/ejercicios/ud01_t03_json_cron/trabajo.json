@@ -1,0 +1,12 @@
+[
+    {
+        "id": "backup",
+        "comando": ["python", "backup.py"],
+        "intervalo": 30
+    },
+    {
+        "id": "informe",
+        "comando": ["python", "informe.py"],
+        "intervalo": 60
+    }
+]
