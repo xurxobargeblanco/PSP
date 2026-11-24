@@ -4,15 +4,13 @@ import time
 
 class MiHilo(threading.Thread):
 
-    def __init__(self, nombre, id):
-        super().__init__()
-        self.nombre = nombre
-        self.id = id
+    def __init__(self, nombre):
+        super().__init__(name = nombre)
 
     def run(self):
         try:
             for i in range(1, 101):
-                print(f"Valor {i} - Hilo {self.id} - Nombre: {self.nombre}")
+                print(f"Valor desde hilo con ident {self.ident} - Nombre: {self.nombre}")
                 time.sleep(0.1)
 
         except Exception as e:
@@ -21,7 +19,7 @@ class MiHilo(threading.Thread):
 
 if __name__ == "__main__":
 
-    inicio = time.time()
+    inicio = time.perf_counter()
 
     hilo = MiHilo("ThreadA", 1)
 
@@ -29,6 +27,6 @@ if __name__ == "__main__":
 
     hilo.join()
 
-    fin = time.time()
+    fin = time.perf_counter()
 
     print(f"Tiempo total de ejecución: {fin - inicio:.2f} segundos")

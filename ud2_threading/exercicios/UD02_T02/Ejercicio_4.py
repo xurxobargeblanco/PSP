@@ -4,7 +4,7 @@ import time
 
 class MiHilo(threading.Thread):
 
-    def __init__(self, nombre, id):
+    def __init__(self, nombre):
         super().__init__()
         self.nombre = nombre
         self.id = id
@@ -12,7 +12,7 @@ class MiHilo(threading.Thread):
     def run(self):
         try:
             for i in range(1, 101):
-                print(f"Valor {i} - Hilo {self.id} - Nombre: {self.nombre}")
+                print(f"Valor desde hilo con {self.id} - Nombre: {self.nombre}")
                 time.sleep(0.1)
 
         except Exception as e:
